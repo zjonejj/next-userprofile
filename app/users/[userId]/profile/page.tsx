@@ -61,7 +61,7 @@ const UserPage: React.FC<UserPageProps> = async ({ params }) => {
             </ul>
           </div>
           <div className="absolute right-3 top-0 md:pl-6 md:static">
-            {user && <UserProfileUpdateDialog user={user} />}
+            {user && <UserProfileUpdateDialog user={user} refresh />}
           </div>
         </div>
       </div>

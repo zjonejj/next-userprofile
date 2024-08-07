@@ -24,12 +24,12 @@ import UserProfileForm from "../UserProfileForm";
 
 interface UserProfileUpdateDialogProps {
   user: User;
-  handleUpdatedUser?: () => void;
+  refresh?: boolean;
 }
 
 const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
   user,
-  handleUpdatedUser,
+  refresh,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [snackbarState, setSnackbarState] = useState<SnackbarState>({
@@ -63,14 +63,13 @@ const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
       const user = await updateUserProfile("1", data);
 
       console.log("Response:", user);
-      handleUpdatedUser && handleUpdatedUser();
       setSnackbarState({
         open: true,
         message: "Profile updated successfully!",
         severity: "success",
       });
       closeDialog();
-      router.refresh();
+      refresh && router.refresh();
     } catch (error) {
       if (
         (error as ErrorResponse) &&
@@ -114,8 +113,8 @@ const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
         <DialogTitle>Update User Profile</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter your profile information below, and click "Subscribe"
-            to save your changes.
+            Please enter your profile information below, and click "Submit" to
+            save your changes.
           </DialogContentText>
 
           <FormProvider {...methods}>

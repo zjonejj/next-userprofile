@@ -3,6 +3,10 @@ This is a [Next.js](https://nextjs.org/)@latest project bootstrapped with [`crea
 ## Getting Started
 
 ```bash
+# node version
+$ node -v
+v21.6.2
+
 # install packages
 yarn
 # migtate and create a user profire for test

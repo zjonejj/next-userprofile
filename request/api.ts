@@ -20,5 +20,3 @@ export const updateUserProfile = async (
     body: body,
   });
 };
-
-// 可以在这里添加更多的 API 请求函数
