@@ -1,0 +1,42 @@
+name: z2qaJ5cpMS46EKGcNFo3KaMGfwRWWik8kcvbD
+description: userpofile page and edit dialog
+group: dapp
+main: server.mjs
+author:
+  name: Jone
+specVersion: 1.2.8
+version: 1.0.0
+title: userprofile
+files:
+  - blocklet.md
+  - screenshots
+interfaces:
+  - type: web
+    name: publicUrl
+    path: /
+    prefix: "*"
+    port: BLOCKLET_PORT
+    protocol: http
+did: z2qaJ5cpMS46EKGcNFo3KaMGfwRWWik8kcvbD
+scripts:
+  dev: npx next dev
+logo: logo.png
+community: ""
+documentation: ""
+homepage: ""
+license: ""
+payment:
+  price: []
+  share: []
+timeout:
+  start: 60
+requirements:
+  
+  server: ">=1.7.0"
+  os: "*"
+  cpu: "*"
+  nodejs: "*"
+environments: []
+capabilities: {}
+screenshots: []
+components: []
