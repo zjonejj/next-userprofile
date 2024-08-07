@@ -11,14 +11,15 @@ import {
   useTheme,
 } from "@mui/material";
 
-import { ErrorResponse } from "@/typings/fetch";
+import useFetch from "@/hooks/ useFetch";
+import { handleFormErrors } from "@/utils/form-errors";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { CiEdit } from "react-icons/ci";
 import { updateUserProfile } from "../../../request/api";
 import { User } from "../../../typings/api";
-import { handleFormErrors } from "../../../utils/form-errors";
 import SnackbarAlert, { SnackbarState } from "../../SnackBarAlert";
 import UserProfileForm from "../UserProfileForm";
 
@@ -38,7 +39,6 @@ const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
     severity: "success",
   });
   const router = useRouter();
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -50,6 +50,14 @@ const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
     },
   });
 
+  const {
+    execute: updateExecute,
+    loading,
+    error,
+  } = useFetch(updateUserProfile, {
+    immediate: false,
+  });
+
   const openDialog = () => {
     setIsDialogOpen(true);
   };
@@ -59,10 +67,9 @@ const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
   };
 
   const handleFormSubmit: SubmitHandler<User> = async (data) => {
-    try {
-      const user = await updateUserProfile("1", data);
+    await updateExecute(user.id, data);
 
-      console.log("Response:", user);
+    if (!loading && !error) {
       setSnackbarState({
         open: true,
         message: "Profile updated successfully!",
@@ -70,26 +77,23 @@ const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
       });
       closeDialog();
       refresh && router.refresh();
-    } catch (error) {
-      if (
-        (error as ErrorResponse) &&
-        (error as ErrorResponse).status === 400 &&
-        (error as ErrorResponse).data
-      ) {
-        handleFormErrors((error as ErrorResponse).data, methods.setError);
-      } else {
-        var errorMessage = (error as ErrorResponse)
-          ? (error as ErrorResponse).message
-          : "Failed to update profile!";
-
-        setSnackbarState({
-          open: true,
-          message: errorMessage,
-          severity: "error",
-        });
-      }
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      const errorMessage = error.message || "Failed to update profile!";
+      setSnackbarState({
+        open: true,
+        message: errorMessage,
+        severity: "error",
+      });
+
+      if (error.status === 400 && error.data) {
+        handleFormErrors(error.data, methods.setError);
+      }
+    }
+  }, [error]);
 
   const handleSnackbarClose = () => {
     setSnackbarState((prevState) => ({
@@ -125,13 +129,15 @@ const UserProfileUpdateDialog: React.FC<UserProfileUpdateDialogProps> = ({
           <Button onClick={closeDialog} color="secondary">
             Cancel
           </Button>
-          <Button
+          <LoadingButton
+            loading={loading}
+            disabled={loading}
             onClick={methods.handleSubmit(handleFormSubmit)}
             color="primary"
             variant="contained"
           >
-            Submit
-          </Button>
+            {loading ? "Submitting..." : "Submit"}
+          </LoadingButton>
         </DialogActions>
       </Dialog>
       <SnackbarAlert

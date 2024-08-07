@@ -10,7 +10,7 @@ export const getUser = async (userId: string): Promise<User> => {
 
 // 更新用户资料
 export const updateUserProfile = async (
-  userId: string,
+  userId: number,
   user: User
 ): Promise<User> => {
   const { id, ...body } = user;
