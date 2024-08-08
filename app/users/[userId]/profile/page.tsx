@@ -33,12 +33,14 @@ const UserPage: React.FC<UserPageProps> = async ({ params }) => {
       <img
         className="w-full min-w-[300px] h-44 md:h-52 object-cover object-center"
         src="/bg-show.jpg"
+        alt="profile-bg-picture"
       />
       <div className="flex flex-col md:flex-row bg-white">
         <div className="relative w-full md:w-1/3 md:mt-0 -mt-24 flex itemms-center justify-center">
           <img
             src="/h-man.jpg"
             className="h-36 w-36 md:h-40 md:w-40 md:absolute md:-top-10 md:right-0 rounded-full object-cover object-center border-4 shadow-lg border-white"
+            alt="user-avator"
           />
         </div>
         <div className="w-full  my-0 px-4 py-5 md:w-2/3 relative md:flex md:justify-start md:items-start">
