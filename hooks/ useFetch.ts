@@ -53,8 +53,7 @@ const useFetch = <T, Args extends any[]>(
 
   useEffect(() => {
     if (immediate) {
-      // @ts-ignore
-      execute();
+      execute(...([] as unknown as Args))
     }
 
     return () => {
